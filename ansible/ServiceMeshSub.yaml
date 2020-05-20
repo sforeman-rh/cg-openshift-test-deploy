@@ -1,0 +1,57 @@
+---
+- name: Subscriptions
+  remote_user: sscaling-redhat.com
+  hosts: webserver
+  tasks:
+    - name: Create Service Mesh Subscription
+      k8s:
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: servicemeshoperator
+            namespace: openshift-operators
+          spec:
+            channel: "1.0"
+            name: servicemeshoperator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+    - name: Create Jaeger Subscription
+      k8s:
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: jaeger-product
+            namespace: openshift-operators
+          spec:
+            channel: stable
+            name: jaeger-product
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+    - name: Create Kiali Subscription
+      k8s:
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: kiali-ossm
+            namespace: openshift-operators
+          spec:
+            channel: stable
+            name: kiali-ossm
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace
+    - name: Create Elasticsearch Subscription
+      k8s:
+        definition:
+          apiVersion: operators.coreos.com/v1alpha1
+          kind: Subscription
+          metadata:
+            name: elasticsearch-operator
+            namespace: openshift-operators
+          spec:
+            channel: "4.3"
+            name: elasticsearch-operator
+            source: redhat-operators
+            sourceNamespace: openshift-marketplace        
