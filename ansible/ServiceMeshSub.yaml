@@ -1,6 +1,7 @@
 ---
-- name: Subscriptions
+- name: Service Mesh Install
   hosts: webserver
+  gather_facts: no
   tasks:
     - name: Create Service Mesh Subscription
       k8s:
@@ -54,3 +55,54 @@
             name: elasticsearch-operator
             source: redhat-operators
             sourceNamespace: openshift-marketplace        
+    - name: Istio Project Creation
+      k8s:
+        definition:
+          apiVersion: project.openshift.io/v1
+          kind: Project
+          metadata:
+            name: istio-system
+            display-name: "Service Mesh System"
+    - name: Istio Installation
+      k8s:
+        definition:
+          apiVersion: maistra.io/v1
+          kind: ServiceMeshControlPlane
+          metadata:
+            name: basic-install
+            namespace: istio-system
+          spec:
+            istio:
+              gateways:
+                istio-egressgateway:
+                  autoscaleEnabled: false
+                istio-ingressgateway:        
+                  autoscaleEnabled: false
+              mixer:
+                policy:
+                  autoscaleEnabled: false
+                telemetry:
+                  autoscaleEnabled: false
+              pilot:
+                autoscaleEnabled: false
+                traceSampling: 100
+              kiali:
+                enabled: true
+              grafana:
+                enabled: true
+              tracing:
+                enabled: true
+                jaeger:
+                  template: all-in-one
+    - name: Service Mesh Member Roll
+      k8s:
+        definition:
+          apiVersion: maistra.io/v1
+          kind: ServiceMeshMemberRoll
+          metadata:
+            name: default
+            namespace: istio-system
+          spec:
+            members:
+              # a list of projects joined into the service mesh
+              - default
