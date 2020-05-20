@@ -1,6 +1,5 @@
 ---
 - name: Subscriptions
-  remote_user: sscaling-redhat.com
   hosts: webserver
   tasks:
     - name: Create Service Mesh Subscription
