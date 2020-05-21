@@ -1,4 +1,4 @@
-#service B
+#!/usr/bin/python
 import time
 import random
 while(True):
