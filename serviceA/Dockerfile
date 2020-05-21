@@ -1,5 +1,11 @@
 FROM python:3
 
-COPY . serviceA.py
+ADD serviceA.py /
 
-CMD [ "python3", "./serviceA.py" ]
+RUN pip install flask
+
+RUN pip install flask_restful
+
+EXPOSE 3333
+
+CMD [ "python", "./serviceA.py" ]

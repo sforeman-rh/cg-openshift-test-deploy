@@ -1,7 +1,14 @@
-#!/user/bin/python
-import time
-import random
-if __name__ == "__main__":
-  while(True):
-    print("hello world, from service A!")
-    time.sleep(random.randint(2, 8))
+from flask import Flask, request
+from flask_restful import Resource, Api
+
+app = Flask(__name__)
+api=Api(app)
+
+class Greeting (Resources):
+  def get(self):
+    return 'Hello World!'
+
+api.add_resource(Greeting, '/')
+
+if __name__ == '__main__':
+  app.run('0.0.0.0','3333')
