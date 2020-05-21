@@ -1,6 +1,7 @@
-#!/usr/bin/python
 import time
 import random
-while(True):
-  print("hello world, from service B!")
-  time.sleep(random.randint(2, 8))
+if __name__ == "__main__":
+  while(True):
+    print("hello world, from service B!")
+    time.sleep(random.randint(2, 8))
+
