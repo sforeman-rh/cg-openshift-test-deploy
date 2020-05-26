@@ -1,0 +1,29 @@
+---
+- name: deploy bookinfo application
+  hosts: localhost
+  connection: local
+  tasks:
+
+  - name: delete bookinfo project (if necessary)
+    command: "oc delete project bookinfo"
+    ignore_errors: yes
+
+  - name: create bookinfo project
+    command: "oc new-project bookinfo"
+
+  - name: goto bookinfo project
+    command: "oc project bookinfo"
+  
+  - name: edit serviceMeshMemberRoll to include bookinfo project
+    command: "oc -n istio-system patch --type=json smmr default -p '[{\"op\":\"add\",\"path\":\"/spec/members\",\"value\":[\"bookinfo\"]}]'"
+
+  - name: deploy bookinfo application
+    command: "oc apply -n bookinfo -f bookinfo.yaml"
+
+  - name: create ingress gateway
+    command: "oc apply -n bookinfo -f bookinfo-gateway.yaml"
+
+  - name: apply destination rules
+    command: "oc apply -n bookinfo -f destination-rule-all-mtls.yaml"
+
+...
